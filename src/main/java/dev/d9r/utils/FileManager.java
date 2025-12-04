@@ -2,20 +2,23 @@ package dev.d9r.utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import static java.lang.IO.println;
+
 public class FileManager {
-    private final File file;
+    private File file;
     private final List<String> lines;
 
-    public FileManager(final String path) {
-        this.file = new File(path);
+    public FileManager() {
         this.lines = new ArrayList<>();
     }
 
-    public List<String> getInputLines() {
+    public List<String> getInputLines(final Path path) {
+        this.file = new File(path.toUri());
         if (lines.isEmpty()) {
             try (Scanner reader = new Scanner(getFile())) {
                 while (reader.hasNextLine()) {
@@ -23,8 +26,8 @@ public class FileManager {
                     getLines().add(line);
                 }
 
-            } catch (FileNotFoundException e) {
-                System.out.println("File not found");
+            } catch (FileNotFoundException _) {
+                println("File not found");
             }
         }
         return getLines();

@@ -1,14 +1,18 @@
 package dev.d9r;
 
-import dev.d9r.exercise.ExerciseTwoTwo;
 import dev.d9r.runner.ExerciseRunner;
-import dev.d9r.utils.FileManager;
+
+import static java.lang.IO.println;
 
 public class Main {
     public static void main(String[] args) {
-        var fileManager = new FileManager("inputs/2/input.txt");
+        if (args.length == 0) {
+            println("Please provide a day to run");
+            return;
+        }
 
-        var ex = new ExerciseRunner(new ExerciseTwoTwo(), fileManager.getInputLines());
-        ex.start();
+        int dayNumber = Integer.parseInt(args[0]);
+        var runner = new ExerciseRunner();
+        runner.runDay(dayNumber);
     }
 }
