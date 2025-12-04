@@ -39,8 +39,8 @@ public class Exercise03 implements Exercise {
             var chars = line.toCharArray();
             int toRemove = chars.length - 12;
 
-            for (int i = 0; i < chars.length; i++) {
-                var num = Character.getNumericValue(chars[i]);
+            for (char aChar : chars) {
+                var num = Character.getNumericValue(aChar);
 
                 while (!stack.isEmpty() && stack.peek() < num && toRemove > 0) {
                     stack.pop();
