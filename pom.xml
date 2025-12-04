@@ -37,6 +37,9 @@
                     <mainClass>${mainClass}</mainClass>
                     <buildArgs>
                         <buildArg>--no-fallback</buildArg>
+                        <buildArg>-H:IncludeResources=.*\.txt$</buildArg>
+                        <buildArg>--initialize-at-build-time=dev.d9r.exercise</buildArg>
+                        <buildArg>-H:+ReportExceptionStackTraces</buildArg>
                     </buildArgs>
                 </configuration>
             </plugin>

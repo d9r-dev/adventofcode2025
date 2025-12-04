@@ -4,10 +4,7 @@ import dev.d9r.exercise.Exercise;
 import dev.d9r.utils.FileManager;
 
 import java.lang.reflect.Constructor;
-import java.net.URISyntaxException;
-import java.nio.file.Path;
 import java.util.List;
-import java.util.Objects;
 
 import static java.lang.IO.println;
 
@@ -21,13 +18,14 @@ public class ExerciseRunner {
     }
 
     private List<String> readInput(int dayNumber) {
-        Path path = null;
-        try {
-            path = Path.of(ClassLoader.getSystemResource(dayNumber + ".txt").toURI());
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
+        String resourceName = dayNumber + ".txt";
+        var inputStream = getClass().getClassLoader().getResourceAsStream(resourceName);
+        
+        if (inputStream == null) {
+            throw new RuntimeException("Resource not found: " + resourceName + ". Make sure " + resourceName + " exists in src/main/resources/");
         }
-        return fileManager.getInputLines(Objects.requireNonNull(path));
+        
+        return fileManager.getInputLines(inputStream);
     }
 
     public void runDay(int dayNumber) {
@@ -48,10 +46,13 @@ public class ExerciseRunner {
             println("Part 2: " + exercise.part2(input));
             System.out.printf("(Time: %.2f ms)%n", (System.nanoTime() - start2) / 1_000_000.0);
 
-        } catch (ClassNotFoundException _) {
+        } catch (ClassNotFoundException e) {
             System.err.println("Solution for Day " + dayNumber + " not found!");
+            System.err.println("Looking for class: " + DAYS_PACKAGE + "." + dayClassName);
+            e.printStackTrace();
         }
         catch (Exception e) {
+            System.err.println("Error running day " + dayNumber + ":");
             e.printStackTrace();
         }
     }
