@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static java.lang.Integer.parseInt;
-
 public class ExerciseTwoOne implements Exercise{
 
     @Override
@@ -31,7 +29,7 @@ public class ExerciseTwoOne implements Exercise{
         return result;
     }
 
-    private Map<String, String> getMapOfRanges(String input) {
+        private Map<String, String> getMapOfRanges(String input) {
         Map<String, String> rangeMap = new HashMap<>();
         
         String[] ranges = input.split(",");
