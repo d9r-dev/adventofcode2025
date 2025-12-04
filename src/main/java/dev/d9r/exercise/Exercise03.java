@@ -1,5 +1,6 @@
 package dev.d9r.exercise;
 
+import java.util.ArrayDeque;
 import java.util.List;
 
 public class Exercise03 implements Exercise {
@@ -32,6 +33,36 @@ public class Exercise03 implements Exercise {
 
     @Override
     public Number part2(List<String> input) {
-        return null;
+        long result = 0;
+        for (String line : input) {
+            var stack = new ArrayDeque<Integer>();
+            var chars = line.toCharArray();
+            int toRemove = chars.length - 12;
+
+            for (int i = 0; i < chars.length; i++) {
+                var num = Character.getNumericValue(chars[i]);
+
+                while (!stack.isEmpty() && stack.peek() < num && toRemove > 0) {
+                    stack.pop();
+                    toRemove--;
+                }
+
+                stack.push(num);
+            }
+
+            while (toRemove > 0) {
+                stack.pop();
+                toRemove--;
+            }
+
+            StringBuilder resultstr = new StringBuilder();
+            while (!stack.isEmpty()) {
+                resultstr.append(stack.pop());
+            }
+
+            String res = resultstr.reverse().toString();
+            result += Long.parseLong(res);
+        }
+        return result;
     }
 }
