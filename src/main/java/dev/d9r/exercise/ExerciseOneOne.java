@@ -14,7 +14,7 @@ public class ExerciseOneOne implements Exercise {
     }
 
     @Override
-    public int run(List<String> input) {
+    public Number run(List<String> input) {
         input.forEach(this::checkLine);
         return this.solution;
     }
