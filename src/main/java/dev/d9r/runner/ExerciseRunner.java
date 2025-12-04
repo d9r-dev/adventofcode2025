@@ -42,11 +42,11 @@ public class ExerciseRunner {
 
             long start1 = System.nanoTime();
             println("Part 1: " + exercise.part1(input));
-            System.out.printf("(Time: %.2f ms)%n", (System.nanoTime() - start1) * 1e-9);
+            System.out.printf("(Time: %.2f ms)%n", (System.nanoTime() - start1) / 1_000_000.0);
 
             long start2 = System.nanoTime();
             println("Part 2: " + exercise.part2(input));
-            System.out.printf("(Time: %.2f ms)%n", (System.nanoTime() - start2) * 1e-9);
+            System.out.printf("(Time: %.2f ms)%n", (System.nanoTime() - start2) / 1_000_000.0);
 
         } catch (ClassNotFoundException _) {
             System.err.println("Solution for Day " + dayNumber + " not found!");
