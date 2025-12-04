@@ -2,6 +2,7 @@ package dev.d9r.utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,17 @@ public class FileManager {
             }
         }
         return getLines();
+    }
+
+    public List<String> getInputLines(final InputStream inputStream) {
+        lines.clear();
+        try (Scanner reader = new Scanner(inputStream)) {
+            while (reader.hasNextLine()) {
+                String line = reader.nextLine();
+                lines.add(line);
+            }
+        }
+        return lines;
     }
 
     public File getFile() {
