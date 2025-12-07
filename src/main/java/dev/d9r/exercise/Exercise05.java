@@ -1,17 +1,19 @@
 package dev.d9r.exercise;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Exercise05 implements Exercise {
+    private ExerciseInput input;
 
     @Override
     public Number part1(List<String> input) {
-        ExerciseInput exerciseInput = parseInput(input);
+        this.input = parseInput(input);
 
         int numberOfGoodIngredients = 0;
-        for (long id : exerciseInput.ingredientIds()) {
-            if (isGoodIngredien(id, exerciseInput.allGoodIngredients())) {
+        for (long id : this.input.ingredientIds()) {
+            if (isGoodIngredien(id, this.input.allGoodIngredients())) {
                 numberOfGoodIngredients++;
             }
         }
@@ -31,7 +33,11 @@ public class Exercise05 implements Exercise {
 
     @Override
     public Number part2(List<String> input) {
-        return null;
+        long result = 0;
+        for (long[] range : this.input.allGoodIngredients()) {
+            result += range[1] - range[0] + 1;
+        }
+        return result;
     }
 
     private ExerciseInput parseInput(List<String> input) {
@@ -52,7 +58,21 @@ public class Exercise05 implements Exercise {
             long end = Long.parseLong(rangeParts[1]);
             allGoodIngredients.add(new long[]{start, end});
         }
-        return allGoodIngredients;
+        allGoodIngredients.sort(Comparator.comparingLong(range -> range[0]));
+
+        return mergeRanges(allGoodIngredients);
+    }
+
+    private List<long[]> mergeRanges(List<long[]> allGoodIngredients) {
+        List<long[]> rangesMerged = new ArrayList<>();
+        for (long[] range : allGoodIngredients) {
+            if (rangesMerged.isEmpty() || rangesMerged.getLast()[1] < range[0]) {
+                rangesMerged.add(range);
+            } else {
+                rangesMerged.getLast()[1] = Math.max(rangesMerged.getLast()[1], range[1]);
+            }
+        }
+        return rangesMerged;
     }
 
     private record ExerciseInput(long[] ingredientIds, List<long[]> allGoodIngredients) {
