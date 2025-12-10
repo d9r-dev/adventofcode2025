@@ -78,7 +78,70 @@ public class Exercise06 implements Exercise {
 
     @Override
     public Number part2(List<String> input) {
-        return null;
+        long result = 0;
+        List<Problem> problems = parseInput2(input);
+        for (Problem problem : problems) {
+            long problemResult = problem.op == Operation.ADD ? 0 : 1;
+            BinaryOperator<Long> operation = problem.op == Operation.ADD ? Long::sum : (a, b) -> a * b;
+            for (var number : problem.numbers) {
+                problemResult = operation.apply(problemResult, (long) number);
+            }
+            result += problemResult;
+        }
+        return result;
+
+    }
+
+    private List<Problem> parseInput2(List<String> input) {
+        var problems = new ArrayList<Problem>();
+        int maxWidth = input.stream().mapToInt(String::length).max().orElse(0);
+        String operatorLine = input.get(input.size() - 1);
+
+        int col = maxWidth - 1;
+        while (col >= 0) {
+            while (col >= 0 && isColumnAllSpaces(input, col)) {
+                col--;
+            }
+            if (col < 0) break;
+
+            int endCol = col + 1;
+            while (col >= 0 && !isColumnAllSpaces(input, col)) {
+                col--;
+            }
+            int startCol = col + 1;
+
+            var numbers = new ArrayList<Integer>();
+            for (int c = endCol - 1; c >= startCol; c--) {
+                StringBuilder numBuilder = new StringBuilder();
+                for (int row = 0; row < input.size() - 1; row++) {
+                    String line = input.get(row);
+                    char ch = c < line.length() ? line.charAt(c) : ' ';
+                    if (ch != ' ') {
+                        numBuilder.append(ch);
+                    }
+                }
+                if (!numBuilder.isEmpty()) {
+                    numbers.add(Integer.parseInt(numBuilder.toString()));
+                }
+            }
+
+            Operation op = null;
+            for (int c = startCol; c < endCol; c++) {
+                char ch = c < operatorLine.length() ? operatorLine.charAt(c) : ' ';
+                if (ch == '+') {
+                    op = Operation.ADD;
+                    break;
+                } else if (ch == '*') {
+                    op = Operation.MULTIPLY;
+                    break;
+                }
+            }
+
+            if (!numbers.isEmpty() && op != null) {
+                problems.add(new Problem(numbers.stream().mapToInt(Integer::intValue).toArray(), op));
+            }
+        }
+        return problems;
     }
 
     private record Problem(int[] numbers, Operation op) {
